@@ -6,14 +6,12 @@ IFX is an DiDi Cloud self-research AI Accelerated Inference Engine. It Provide l
 
 ## Enviroment Prepare
 
-- **Host**：DiDi Cloud General P4 instance with 8 vCPUs，1 Nvidia Tesla P4，8GB GPU Memory，16GB CPU Memory
-- **Software**: IFX, NGC tensorrt:19.04-py3, Tensorflow-1.13.1
+- **Host**：DiDi Cloud General T4 instance with 8 vCPUs，1 Nvidia Tesla T4，16GB GPU Memory，16GB CPU Memory
+- **Software**: IFX, CUDA-10.0, CUDNN-7.5.0, Tensorflow-1.13.1, TensorRT-5.1.2.2
 - **Model**: [tensorflow slim resnet_v1_50](https://github.com/tensorflow/models/tree/master/research/slim)
 
 
 ```bash
-nvidia-docker pull nvcr.io/nvidia/tensorrt:19.04-py3
-nvidia-docker run -it nvcr.io/nvidia/tensorrt:19.04-py3
 pip install tensorflow==1.13.1
 ```
 
@@ -22,7 +20,7 @@ pip install tensorflow==1.13.1
 ```bash
 # Benchmark with fake input
 MODEL_DIR=`pwd`/resnet_v1_50_int8.ifxmodel
-python benchmark.py
+python benchmark.py --model $MODEL_DIR
 
 # Benchmark with ImageNet evaluation tfrecord
 MODEL_DIR=`pwd`/resnet_v1_50_int8.ifxmodel
@@ -30,4 +28,4 @@ DATA_DIR="ImageNet evaluation tfrecord directory"
 python eval.py --model $MODEL_DIR  --data_dir $DATA_DIR
 ```
 
-Note: Get DiDi Cloud General P4 instance here: [https://www.didiyun.com/production/gpu.html](https://www.didiyun.com/production/gpu.html)
+Note: Get DiDi Cloud General T4 instance here: [https://www.didiyun.com/production/gpu.html](https://www.didiyun.com/production/gpu.html)
