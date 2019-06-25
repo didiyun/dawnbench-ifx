@@ -31,7 +31,7 @@ def deserialize_image_record(record):
       'image/encoded': tf.FixedLenFeature([], tf.string, ''),
       'image/class/label': tf.FixedLenFeature([1], tf.int64, -1),
   }
-  
+
   obj = tf.parse_single_example(record, feature_map)
   imgdata = obj['image/encoded']
   label = tf.cast(obj['image/class/label'], tf.int32)
@@ -46,19 +46,19 @@ def get_preprocess_fn():
   return process
 
 # ================== get param
-parser = OptionParser() 
-parser.add_option("-m", "--model", action="store", 
-                  dest="model", 
+parser = OptionParser()
+parser.add_option("-m", "--model", action="store",
+                  dest="model",
                   help="input model file")
-parser.add_option("-d", "--data_dir", action="store", 
-                  dest="data_dir", 
-                  help="imagenet evaluation tfrecord directory") 
+parser.add_option("-d", "--data_dir", action="store",
+                  dest="data_dir",
+                  help="imagenet evaluation tfrecord directory")
 (options, args) = parser.parse_args()
 
 model_path = os.path.abspath(options.model)
 imagenet_eval_dir = os.path.abspath(options.data_dir)
 
-# ================== init 
+# ================== init
 sess = tf.Session()
 filenames = glob.glob(imagenet_eval_dir + "/validation-*")
 image, label, iterator = eval_input_fn(filenames, get_preprocess_fn())
@@ -79,8 +79,8 @@ loops = 1
 while True:
   try:
     img, l = sess.run([image, label])
-    img = img[0].transpose([2, 0, 1]).copy().astype('float32').reshape(3*224*224)
-    
+    img = img[0].transpose([2, 0, 1]).copy().astype(np.int8).reshape(3*224*224)
+
     start_time = datetime.now()
     time, output = IFX.doInference(img)
     time_python.append(millis(start_time))
@@ -97,7 +97,7 @@ while True:
       print("Top-5: " + str(correct / loops))
       print("Time cpp: " + str(sum(time_cpp) / loops))
       print("Time python: " + str(sum(time_python) / loops))
-    
+
     loops = loops + 1
   except tf.errors.OutOfRangeError:
     break
