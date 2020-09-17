@@ -6,26 +6,25 @@ IFX is an DiDi Cloud self-research AI Accelerated Inference Engine. It Provide l
 
 ## Enviroment Prepare
 
-- **Host**：DiDi Cloud General T4 instance with 8 vCPUs，1 Nvidia Tesla T4，16GB GPU Memory，16GB CPU Memory
-- **Software**: IFX, CUDA-10.0, CUDNN-7.5.0, Tensorflow-1.13.1, TensorRT-5.1.2.2
-- **Model**: [tensorflow slim resnet_v1_50](https://github.com/tensorflow/models/tree/master/research/slim)
-
-
-```bash
-pip install tensorflow==1.13.1
-```
+- **Host**: DiDi Cloud General T4 instance with 8 vCPUs，1 Nvidia Tesla T4，16GB GPU Memory，16GB CPU Memory
+- **OS**: ubuntu 16.04
+- **Software**: IFX, CUDA-10.0, OpenCV2, glog
+- **Model**: Standard Resnet26
 
 ## How To Run?
 
 ```bash
 # Benchmark with fake input
-MODEL_DIR=`pwd`/resnet_v1_50_int8.ifxmodel
-python benchmark.py --model $MODEL_DIR
+MODEL_DIR=`pwd`/resnet26.ifxmodel
+./dawnbench-ifx 1 $MODEL_DIR
 
-# Benchmark with ImageNet evaluation tfrecord
+# Benchmark with ImageNet evaluation dataset
 MODEL_DIR=`pwd`/resnet_v1_50_int8.ifxmodel
-DATA_DIR="ImageNet evaluation tfrecord directory"
-python eval.py --model $MODEL_DIR  --data_dir $DATA_DIR
+DATA_DIR="ImageNet evaluation dataset directory"
+LABEL_FILE="ImageNet label file"
+./dawnbench-ifx 0 $MODEL_DIR $LABEL_FILE $DATA_DIR
 ```
 
 Note: Get DiDi Cloud General T4 instance here: [https://www.didiyun.com/production/gpu.html](https://www.didiyun.com/production/gpu.html)
+
+**使用 AI 大师码【0220】购买滴滴云 GPU 享 9 折优惠!!!**
